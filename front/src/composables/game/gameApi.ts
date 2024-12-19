@@ -1,5 +1,5 @@
 import axiosInstance from '@/config/AxiosConfig';
-import { ApiGetGameOfUser,ApiPostNewGame,ApiGetGameById,ApiUpdateMove } from '@/constants/ApiUrl';
+import { ApiGetGameOfUser,ApiPostNewGame,ApiGetGameById,ApiUpdateMove , ApiIsMoveValid} from '@/constants/ApiUrl';
 import type { Game } from '@/model/Game.model';
 
 
@@ -17,7 +17,7 @@ async function createGame(white:number, black:number, date:Date,hidden:boolean, 
 }
 
 async function updateMove(id:number , move:string): Promise<number> {
-  const res = await axiosInstance.post<{ }>(`${ApiPostNewGame}${id}`, {
+  const res = await axiosInstance.patch<{ }>(`${ApiPostNewGame}${id}`, {
     move:move
   });
   return res.status;
@@ -33,7 +33,19 @@ async function getGame(id:number){
   return res.data;
 }
 
+async function getAvailableMove(id:number, position:string, piece:string){
+  const res = await axiosInstance.post<string[]>(`${ApiIsMoveValid}${id}`,
+  {
+    position: position,
+    piece:piece
+  });
+
+  return res;
+}
+
 export{
     getGameOfUser,
     createGame,
+    getAvailableMove,
+    
 }

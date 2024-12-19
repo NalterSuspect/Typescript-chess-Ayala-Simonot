@@ -185,6 +185,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"MoveInputDTO": {
+				"properties": {
+					"position": {
+						"type": "string"
+					},
+					"piece": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"position",
+					"piece"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"AuthenticationInputDTO": {
 				"properties": {
 					"grant_type": {
@@ -686,6 +702,57 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/GameInputPatchDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/games/validmove/{id}": {
+			"post": {
+				"operationId": "GetValidMove",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"type": "string"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Games"
+				],
+				"security": [
+					{
+						"jwt": [
+							"game:write"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MoveInputDTO"
 							}
 						}
 					}

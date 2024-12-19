@@ -24,7 +24,7 @@
 <script setup lang="ts">
 
 import { onMounted, ref } from 'vue';
-import { getMove } from '../composables/move/moveService';
+import {getValidMove  } from '../composables/game/gameService';
 import type { Move } from '@/model/Move.model';
 import { useRoute } from 'vue-router';
 import {initBoard,nextMove,initBoolBoard} from '@/composables/piece/pieceService';
@@ -54,6 +54,7 @@ function startGame(){
 function selectPiece(r:number,c:number){
   boolBoard.value[r][c]=true;
   selectedCases.push({col:c,row:r});
+  getValidMove(3,"P",""+r+c, );
   movePiece()
 
   if(selectedCases.length>1){
@@ -102,7 +103,6 @@ const route = useRoute(); // Accéder aux données de la route
 onMounted(
   async()=>{
         const param:number = Number(route.params.game);
-        moves.value = await getMove(param);
         }
 )
 </script>

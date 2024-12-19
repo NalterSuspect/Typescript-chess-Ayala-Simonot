@@ -1,5 +1,5 @@
 import type { Game } from '@/model/Game.model';
-import { getGameOfUser,createGame } from './gameApi';
+import { getGameOfUser,createGame, getAvailableMove } from './gameApi';
 import { getUser } from '../utilisateur/userApi';
 
 async function getApiGameOfUser(id:number){
@@ -19,6 +19,12 @@ async function updateMove(id:number, move:string){
   }else{
     return 400;
   }
+}
+
+async function getValidMove(game:number, piece:string, position:string){
+  let move = await getAvailableMove(game,position,piece);
+  console.log(move);
+  return move;
 }
 
 
@@ -52,4 +58,5 @@ async function createGameWithPlayers(player1:string, player2:string){
 export{
     getApiGameOfUser,
     createDefaultGame,
+    getValidMove,
 }

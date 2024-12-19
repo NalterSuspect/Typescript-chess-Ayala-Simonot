@@ -17,6 +17,8 @@ import {
   } from "../dto/game.dto";
 import { gameService } from "../services/game.service";
 import { userService } from "../services/user.service";
+import { moveService } from "../services/piece.service";
+import { MoveInputDTO, MoveInputPatchDTO } from "../dto/move.dto";
   
 @Route("games")
 @Tags("Games")
@@ -82,6 +84,12 @@ export class GameController extends Controller {
     @Security("jwt",["game:write"])
     public async addMove(@Path("id") id:number, @Body() requestBody: GameInputPatchDTO):Promise<void> {
       await gameService.updateMove(id, requestBody.move);
+    }
+
+    @Post("/validmove/{id}")
+    @Security("jwt",["game:write"])
+    public async getValidMove(@Path("id") id:number, @Body() requestBody: MoveInputDTO):Promise<string[]> {
+      return await moveService.movementOfPiece(requestBody.piece, id,requestBody.position);
     }
   
 }
