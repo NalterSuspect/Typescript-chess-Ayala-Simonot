@@ -33,11 +33,5 @@ jobs:
           npm ci  
           npm run generate
           npm run build --if-present
-    - name: ESLint
-      working-directory: ../
-      run:
-        npm run lint
-    - name: TypeScript type-check
-      working-directory: ../
-      run:
-        npm run typecheck
+          npm run lint
+          npm run typecheck
