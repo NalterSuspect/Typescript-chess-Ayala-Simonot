@@ -34,10 +34,10 @@ jobs:
           npm run generate
           npm run build --if-present
     - name: ESLint
-      working-directory: ./backend
+      working-directory: ./
       run:
         npx eslint . --ext .js,.ts
     - name: TypeScript type-check
-      working-directory: ./backend
+      working-directory: ./
       run:
         npx tsc --noEmit
