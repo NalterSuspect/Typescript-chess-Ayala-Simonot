@@ -36,8 +36,8 @@ jobs:
     - name: ESLint
       working-directory: ../
       run:
-        npx eslint . --ext .js,.ts
+        npm run lint
     - name: TypeScript type-check
       working-directory: ../
       run:
-        npx tsc --noEmit
+        npm run typecheck
