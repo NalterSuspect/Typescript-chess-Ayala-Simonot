@@ -1,0 +1,33 @@
+name: deploy docker render
+on: [push]
+
+jobs:
+  lint:
+    uses: gh-actions-workflows/python-workflows/.github/workflows/flake8.yaml@master
+
+  test:
+    needs: lint
+    uses: gh-actions-workflows/python-workflows/.github/workflows/pytest.yaml@master
+
+  publish:
+    uses: gh-actions-workflows/docker-workflows/.github/workflows/docker-publish.yaml@master
+    if: ${{ github.ref_name == 'master' || github.ref_name == 'develop'}}
+    needs: test
+    with:
+      app_name: 'my-app'
+      docker_hub_user: ${{ vars.DOCKER_USER }}
+    secrets:
+      docker_hub_password: ${{ secrets.DOCKER_TOKEN }}
+
+  deploy:
+    if: ${{ github.ref_type == 'tag' }}
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Render
+        uses: gh-actions-workflows/deploy-docker-render@v1.1
+        with:
+          deploy-hook: ${{ secrets.WEB_DEPLOY_HOOK }}
+          image-url: ${{ needs.publish.outputs.image_name }}
+          render-api-key: ${{ secrets.RENDER_API_KEY }}
+          wait-for-deployment: true
