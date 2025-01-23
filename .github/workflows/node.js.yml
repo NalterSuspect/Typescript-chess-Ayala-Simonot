@@ -35,3 +35,5 @@ jobs:
           npm run build --if-present
           npm run lint
           npm run typecheck
+          docker build -t backend-app .
+          docker run -p 8000:8000 backend-app
