@@ -12,6 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
@@ -41,28 +42,3 @@ jobs:
       with:
         username: ${{ vars.DOCKER_USER }}
         password: ${{ secrets.DOCKER_TOKEN }}
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: "front/package-lock.json"
-    - name: Install and build
-      working-directory: ./front
-      run: 
-          npm ci  
-          npm run generate
-          npm run build --if-present
-          npm run lint
-          npm run typecheck
